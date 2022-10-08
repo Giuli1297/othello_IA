@@ -331,52 +331,52 @@ def applyMov(table, mov, turno):
     if playableRight(i, j, table):
         tempi = i
         tempj = j + 1
-        while table[tempi][tempj] == opponent and 0 <= tempi <= 8 and 0 <= tempj <= 8:
+        while 0 <= tempi < 8 and 0 <= tempj < 8 and table[tempi][tempj] == opponent:
             table[tempi][tempj] = player
             tempj = tempj + 1
     if playableBottomRight(i, j, table):
         tempi = i + 1
         tempj = j + 1
-        while table[tempi][tempj] == opponent and 0 <= tempi <= 8 and 0 <= tempj <= 8:
+        while 0 <= tempi < 8 and 0 <= tempj < 8 and table[tempi][tempj] == opponent:
             table[tempi][tempj] = player
             tempi = tempi + 1
             tempj = tempj + 1
     if playableBottom(i, j, table):
         tempi = i + 1
         tempj = j
-        while table[tempi][tempj] == opponent and 0 <= tempi <= 8 and 0 <= tempj <= 8:
+        while 0 <= tempi < 8 and 0 <= tempj < 8 and table[tempi][tempj] == opponent:
             table[tempi][tempj] = player
             tempi = tempi + 1
     if playableBottomLeft(i, j, table):
         tempi = i + 1
         tempj = j - 1
-        while table[tempi][tempj] == opponent and 0 <= tempi <= 8 and 0 <= tempj <= 8:
+        while 0 <= tempi < 8 and 0 <= tempj < 8 and table[tempi][tempj] == opponent:
             table[tempi][tempj] = player
             tempi = tempi + 1
             tempj = tempj - 1
     if playableLeft(i, j, table):
         tempi = i
         tempj = j - 1
-        while table[tempi][tempj] == opponent and 0 <= tempi <= 8 and 0 <= tempj <= 8:
+        while 0 <= tempi < 8 and 0 <= tempj < 8 and table[tempi][tempj] == opponent:
             table[tempi][tempj] = player
             tempj = tempj - 1
     if playableTopLeft(i, j, table):
         tempi = i - 1
         tempj = j - 1
-        while table[tempi][tempj] == opponent and 0 <= tempi <= 8 and 0 <= tempj <= 8:
+        while 0 <= tempi < 8 and 0 <= tempj < 8 and table[tempi][tempj] == opponent:
             table[tempi][tempj] = player
             tempi = tempi - 1
             tempj = tempj - 1
     if playableTop(i, j, table):
         tempi = i - 1
         tempj = j
-        while table[tempi][tempj] == opponent and 0 <= tempi <= 8 and 0 <= tempj <= 8:
+        while 0 <= tempi < 8 and 0 <= tempj < 8 and table[tempi][tempj] == opponent:
             table[tempi][tempj] = player
             tempi = tempi - 1
     if playableTopRight(i, j, table):
         tempi = i - 1
         tempj = j + 1
-        while table[tempi][tempj] == opponent and 0 <= tempi <= 8 and 0 <= tempj <= 8:
+        while 0 <= tempi < 8 and 0 <= tempj < 8 and table[tempi][tempj] == opponent:
             table[tempi][tempj] = player
             tempi = tempi - 1
             tempj = tempj + 1

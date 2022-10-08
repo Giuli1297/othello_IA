@@ -1,4 +1,4 @@
-from utils import moves_quantity, calculate_game_result, applyMov, reachable_states_table, cleanReachableStateTable
+from utils import *
 from  copy import deepcopy
 
 def minimaxDecision(table, iterations, player, opponenent):
@@ -25,6 +25,11 @@ def minPlay(plays):
 
 
 def minimaxValue(table, maxplayer, minplayer, iterations, it_counter, turno):
+    turno = turno
+    if turno == maxplayer and not playerCanPlay(table, turno):
+        turno = minplayer
+    elif turno == minplayer and not playerCanPlay(table, turno):
+        turno = maxplayer
 
     if calculate_game_result(table) != 0 or it_counter == iterations*2+1:
         return utilityFunction(table, maxplayer, minplayer)
