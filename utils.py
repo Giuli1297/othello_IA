@@ -9,6 +9,7 @@ def start_othello_game():
     othello_table[3][4] = 2
     othello_table[4][3] = 2
     reachable_states_table(othello_table)
+    print(othello_table)
     return othello_table
 
 

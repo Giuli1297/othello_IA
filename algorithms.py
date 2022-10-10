@@ -1,10 +1,14 @@
 from utils import *
-from  copy import deepcopy
+from copy import deepcopy
+
+node_counter = 0
 
 def minimaxDecision(table, iterations, player, opponenent):
     playTable = deepcopy(table)
-    return minimaxValue(playTable, player, opponenent, iterations, 1, player)[0]
-
+    global node_counter
+    node_counter = 0
+    returnValue = minimaxValue(playTable, player, opponenent, iterations, 1, player)[0]
+    return {"mov": returnValue, "nodos": node_counter}
 
 def maxPlay(plays):
     #print(plays)
@@ -25,6 +29,8 @@ def minPlay(plays):
 
 
 def minimaxValue(table, maxplayer, minplayer, iterations, it_counter, turno):
+    global node_counter
+    node_counter = node_counter + 1
     turno = turno
     if turno == maxplayer and not playerCanPlay(table, turno):
         turno = minplayer
@@ -237,22 +243,3 @@ def utilityFunction(table, player, opponent):
                           (382.026 * cornerClosenessHeuristic) + (78.922 * movilityHeuristic) + \
                           (74.396 * frontPiecesHeuristic) + (10 * tableHeuristic)
     return heuristicFinalValue
-
-
-testTable = [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 4, 3, 0, 0, 0], [0, 0, 4, 1, 2, 3, 0, 0], [0, 0, 3, 2, 1, 4, 0, 0], [0, 0, 0, 3, 4, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]]
-
-movi = minimaxDecision(testTable, iterations=2, player=2, opponenent=1)
-print(movi)
-applyMov(testTable, movi, 2)
-cleanReachableStateTable(testTable)
-print(testTable)
-reachable_states_table(testTable)
-
-
-movi = minimaxDecision(testTable, iterations=2, player=1, opponenent=2)
-print(movi)
-applyMov(testTable, movi, 1)
-cleanReachableStateTable(testTable)
-print(testTable)
-reachable_states_table(testTable)
-print(testTable)
