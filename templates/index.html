@@ -1,294 +1,225 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Othello</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/index.css') }}"
+    />
+  </head>
+  <body>
+    <div id="header">
+      <h1>Othello</h1>
+      {% if error=="Los algoritmos deben ser diferentes" %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+      {% if result %}
+        <p class="error"><b>El ganador es {{ result.ganador }}<b></p>
+        {% endif %}
+    </div>
 
-{% block content %}
-    <h1>{% block title %} Tarea 2 - IA {% endblock %}</h1>
-    <div class="row">
-        <div class="col-md-3">
-            <a href="" class="btn btn-primary">New Game</a>
-        </div>
-        <div class="col-md-9">
-            <div id="main" class="container">
-                <div id="game-board">
-            <table>
-                <tbody>
-                <tr>
-                    <th></th>
-                    <th>a</th>
-                    <th>b</th>
-                    <th>c</th>
-                    <th>d</th>
-                    <th>e</th>
-                    <th>f</th>
-                    <th>g</th>
-                    <th>h</th>
-                </tr>
-                <tr>
-                    <th>1</th>
-                    <td class="cell empty " id="cell_0_0">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_1_0">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_2_0">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_3_0">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_4_0">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_5_0">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_6_0">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_7_0">
-                        <span class="disc"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>2</th>
-                    <td class="cell empty " id="cell_0_1">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_1_1">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_2_1">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_3_1">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_4_1">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_5_1">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_6_1">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_7_1">
-                        <span class="disc"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>3</th>
-                    <td class="cell empty " id="cell_0_2">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_1_2">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_2_2">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_3_2">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_4_2">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_5_2">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_6_2">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_7_2">
-                        <span class="disc"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>4</th>
-                    <td class="cell empty " id="cell_0_3">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_1_3">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_2_3">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell white " id="cell_3_3">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell black " id="cell_4_3">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_5_3">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_6_3">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_7_3">
-                        <span class="disc"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>5</th>
-                    <td class="cell empty " id="cell_0_4">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_1_4">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_2_4">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell black " id="cell_3_4">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell white " id="cell_4_4">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_5_4">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_6_4">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_7_4">
-                        <span class="disc"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>6</th>
-                    <td class="cell empty " id="cell_0_5">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_1_5">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_2_5">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_3_5">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_4_5">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_5_5">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_6_5">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_7_5">
-                        <span class="disc"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>7</th>
-                    <td class="cell empty " id="cell_0_6">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_1_6">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_2_6">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_3_6">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_4_6">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_5_6">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_6_6">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_7_6">
-                        <span class="disc"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>8</th>
-                    <td class="cell empty " id="cell_0_7">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_1_7">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_2_7">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_3_7">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_4_7">
-                        <span class="disc"></span
-                    </td>
-                    <td class="cell empty " id="cell_5_7">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_6_7">
-                        <span class="disc"></span>
-                    </td>
-                    <td class="cell empty " id="cell_7_7">
-                        <span class="disc"></span>
-                    </td>
-                </tr>
-                </tbody>
+    <div id="content" style="display: flex">
+        {% if not result %}
+        <div id="table">
+            <table id="othello_table">
+                <tbody id="othello_table_body"></tbody>
             </table>
         </div>
-            </div>
-        </div>
+        {% endif %}
+        
+        {% if not result %}
+        
+        <form method="post">
+            
+            <div id="opciones" style="display: flex; flex-direction: column">
+                <select
+                name="algoritmo1"
+                id="algoritmo1"
+                class="custom-select"
+                aria-label="Default select example"
+                >
+                <option selected>Seleccionar el primer algoritmo</option>
+                <option value="1">Minimax</option>
+                <option value="2">Random</option>
+                <option value="3">Alpha-Beta</option>
+                <option value="4">Reinforcement Learning</option>
+            </select>
+            
+            <select
+            name="algoritmo2"
+            id="algoritmo2"
+            class="custom-select"
+            aria-label="Default select example"
+            >
+            <option selected>Seleccionar el segundo algoritmo</option>
+            <option value="1">Minimax</option>
+            <option value="2">Random</option>
+            <option value="3">Alpha-Beta</option>
+            <option value="4">Reinforcement Learning</option>
+        </select>
+        
+        <select
+        name="corte"
+        id="corte"
+        class="custom-select"
+        aria-label="Default select example"
+        >
+        <option selected>Seleccionar el Nivel de Corte para Algoritmo 1</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+    </select>
+    
+    <select
+    name="corte2"
+    id="corte2"
+    class="custom-select"
+    aria-label="Default select example"
+    >
+    <option selected>Seleccionar el Nivel de Corte para Algoritmo 2</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+</select>
+<button id="iniciar" type="submit" class="btn btn-primary">Iniciar Algoritmo</button>
+</form>
+{% endif %}
+</div>
+{% if result %}
+<div style="display: flex;">
+    <div id="table2">
+        <table id="othello_table2">
+            <tbody id="othello_table_body2"></tbody>
+        </table>
     </div>
-    <hr>
+    <table class="table">
+        <thead>
+                <tr>
+                    <th>Algoritmo</th>
+                    <th>Promedio Nodos Expandidos</th>
+                    <th>Max Nodos Expandido</th>
+                    <th>Tiempo Total(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ algoritmo1 }} Corte = ({{corte1}})</td>
+                    <td>{{ result['nodos_expandidos_algoritmo_1_promedio'] }}</td>
+                    <td>{{ result['nodos_expandidos_algoritmo_1_max'] }}</td>
+                    <td>{{ result['tiempo_total_algoritmo_1'] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ algoritmo2 }} Corte = ({{corte2}})</td>
+                    <td>{{ result['nodos_expandidos_algoritmo_2_promedio'] }}</td>
+                    <td>{{ result['nodos_expandidos_algoritmo_2_max'] }}</td>
+                    <td>{{ result['tiempo_total_algoritmo_2'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+    
+    {% endif %}
+  </body>
 
-{% endblock %}
+  {% if result %}
+  <script>
 
-{% block newContent %}
-<div id="header">
-    <h1>Othello</h1>
-  </div>
-  <!-- <div>
-      <table id="othello_table">
-        <tbody id="othello_table_body"></tbody>
-      </table>
-  </div> -->
+        function dibujarTablero(mat, n) {
+            console.log("mat")
+            console.log(mat)
+            const table = document.getElementById("othello_table2");
+        const tableBody = document.getElementById("othello_table_body2");
+            for (let i = 0; i < n; i++) {
+              const tr = document.createElement('tr');
+              tableBody.appendChild(tr);
+              for (let j = 0; j < n; j++) {
+                const td = crearCelda();
+                console.log(mat[i][j])
+                if (mat[i][j] != 0) {
+                  const ficha = crearFicha(mat[i][j]);
+                  td.appendChild(ficha);
+                }
+                tr.appendChild(td);
+              }
+            }
+          }
+          function crearFicha(jugador) {
+            const ficha = document.createElement("div");
+            ficha.classList.add("ficha");
+            ficha.style.backgroundColor = pintarFicha(jugador);
+            ficha.innerText = jugador;
+            ficha.style.color = "transparent";
+            return ficha;
+          }
+          
+          
+          function crearCelda() {
+            const td = document.createElement('td')
+            td.classList.add('celda')
+            return td;
+          }
 
-  <div id="comparativo">
-    <table>
-      <thead>
-        <tr>
-          <th>Algoritmo</th>
-          <th>Tiempo (ms)</th>
-          <th>Cantidad de Nodos Expandidos</th>
-          <th>Nivel de Corte</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Minimax</td>
-          <td id="minimax_time">1</td>
-          <td id="minimax_expanded_nodes"></td>
-          <td id="minimax_cut_level"></td>
-        </tr>
-        <tr>
-          <td>Minimax con poda alfa-beta</td>
-          <td id="minimax_ab_time"></td>
-          <td id="minimax_ab_expanded_nodes"></td>
-          <td id="minimax_ab_cut_level"></td>
-        </tr>
-        <tr>
-          <td>Reinforcement Learning</td>
-          <td id="rf_time"></td>
-          <td id="rf_expanded_nodes"></td>
-          <td id="rf_cut_level"></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+          function pintarFicha(player) {
+            print(player)
+            switch (player) {
+              case 2:
+                return "black";
+              case 1:
+                return "white"
+                default:
+                return "grey";
+            }
+          }
+        let matriz = '{{ result.tabla }}';
+        console.log("Probando el script")
+        console.log(matriz)
 
-{% endblock %}
+        
+        matriz = matriz.substring(2, matriz.length - 2).trim();
+        
+        matriz = matriz.split("], [");
+
+        matriz = matriz.map((row) => {
+          return row.split(", ");
+        });
+
+        matriz = matriz.map((row) => {
+          return row.map((col) => {
+            return parseInt(col);
+          });
+        });
+
+        console.log(matriz) 
+
+        dibujarTablero(matriz, 8);
+    </script>
+    {% endif %}
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"
+  ></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</html>
