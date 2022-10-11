@@ -3,7 +3,7 @@ import time
 
 
 from utils import *
-from algorithms import minimaxDecision
+from algorithms import minimaxDecision, minimaxABDecision
 
 
 def playInSomeWay(table, cod, iterations, player, opponent):
@@ -12,6 +12,8 @@ def playInSomeWay(table, cod, iterations, player, opponent):
         mov = minimaxDecision(table, iterations, player, opponent)
     elif cod == 2:
         mov = playRandom(table, player)
+    elif cod == 3:
+        mov = minimaxABDecision(table, iterations, player, opponent)
     return mov
 
 
@@ -51,11 +53,11 @@ def game(algorithm1, algorithm2, algoritm1_level, algorithm2_level):
                 cleanReachableStateTable(table)
                 reachable_states_table(table)
         result = calculate_game_result(table)
-    print(table)
+    # print(table)
     print(max(nodos_expandidos_player1))
     print(max(nodos_expandidos_player2))
-    print(tiempo_player1)
-    print(tiempo_player2)
+    # print(tiempo_player1)
+    # print(tiempo_player2)
     return {"ganador": result,
             "tabla": table,
             "nodos_expandidos_player1": nodos_expandidos_player1,
@@ -74,4 +76,4 @@ def playRandom(table, player):
             "nodos": 1}
 
 
-#print(game(1, 2, 1, 1))
+print(game(1, 3, 1, 1))
