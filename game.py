@@ -76,4 +76,3 @@ def playRandom(table, player):
             "nodos": 1}
 
 
-print(game(1, 3, 1, 1))
