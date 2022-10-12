@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
-from game import game
+from game import *
+from utils import *
 
 app = Flask(__name__)
 
@@ -9,37 +10,113 @@ algorithms = {
     'reinforcement_learning': 3
 }
 
-
-def crearTablero(n):
-    board = [[0 for x in range(n)] for y in range(n)]
-
-    coord1 = int((n/2)-1)
-    coord2 = int((n/2))
-
-    board[coord1][coord1] = 1
-    board[coord1][coord2] = 2
-    board[coord2][coord1] = 2
-    board[coord2][coord2] = 1
-
-    return board
-
+dictionaryLN = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7}
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
         return render_template('index.html')
     elif request.method == 'POST':
-        print(request.form)
         algorithm1 = int(request.form['algoritmo1'])
         algorithm2 = int(request.form['algoritmo2'])
         corte1 = int(request.form['corte'])
         corte2 = int(request.form['corte2'])
 
-        if algorithm1 == algorithm2:
-            return render_template('index.html', error='Los algoritmos deben ser diferentes')
+        # if algorithm1 == algorithm2:
+        #     return render_template('index.html', error='Los algoritmos deben ser diferentes')
 
+        if algorithm1 == 0 and algorithm2 != 0:
+            algoritmo = algorithm2
+            table = start_othello_game()
+            stable = serializeTable(table)
+            cleanReachableStateTableForPlayer(table, 1)
+            print(table)
+            jugandocontext = {
+                'table': table,
+                'stable': stable,
+                'corte': corte2,
+                'algoritmo': algoritmo,
+                'jugador': 2,
+                'jugadas': jugadasgen(table, 2)
+            }
+            return render_template('index.html', context=jugandocontext)
+        elif algorithm1 != 0 and algorithm2 == 0:
+            algoritmo = algorithm1
+            table = start_othello_game()
+            mov_nod = playInSomeWay(table, algorithm1, corte1, player=2, opponent=1)
+            mov = mov_nod['mov']
+            applyMov(table, mov, 2)
+            cleanReachableStateTable(table)
+            reachable_states_table(table)
+            stable = serializeTable(table)
+            cleanReachableStateTableForPlayer(table, opponent=2)
+            print(table)
+            jugandocontext = {
+                'table': table,
+                'stable': stable,
+                'corte': corte1,
+                'algoritmo': algoritmo,
+                'jugador': 1,
+                'jugadas': jugadasgen(table, 1)
+            }
+            return render_template('index.html', context=jugandocontext)
+        if algorithm1 == 100:
+            table = deserializeTable(request.form['stable'])
+            corte = int(request.form['corte'])
+            jugador = int(request.form['jugador'])
+            fila = dictionaryLN[request.form['fila-columna'][0]]
+            columna = int(request.form['fila-columna'][1])-1
+            algoritmo = int(request.form['algoritmo'])
+            if calculate_game_result(table) == 0:
+                applyMov(table, [fila, columna], jugador)
+                cleanReachableStateTable(table)
+                reachable_states_table(table)
+                if playerCanPlay(table, jugador % 2 + 1):
+                    mov_nod = playInSomeWay(table, algoritmo, corte, jugador % 2 + 1, jugador)
+                    mov = mov_nod['mov']
+                    applyMov(table, mov, jugador % 2 + 1)
+                    cleanReachableStateTable(table)
+                    reachable_states_table(table)
+                while not playerCanPlay(table, jugador):
+                    if calculate_game_result(table) != 0:
+                        stable = 0
+                        return render_template('index.html', context={
+                            'table': table,
+                            'stable': stable,
+                            'corte': corte,
+                            'algoritmo': algoritmo,
+                            'jugador': jugador,
+                            'ganador': calculate_game_result(table),
+                            'jugadas': jugadasgen(table, jugador)
+                        })
+                    mov_nod = playInSomeWay(table, algoritmo, corte, jugador % 2 + 1, jugador)
+                    mov = mov_nod['mov']
+                    applyMov(table, mov, jugador % 2 + 1)
+                    cleanReachableStateTable(table)
+                    reachable_states_table(table)
+                stable = serializeTable(table)
+                cleanReachableStateTableForPlayer(table, opponent=jugador % 2 + 1)
+                jugandocontext = {
+                    'table': table,
+                    'stable': stable,
+                    'corte': corte,
+                    'algoritmo': algoritmo,
+                    'jugador': jugador,
+                    'jugadas': jugadasgen(table, jugador)
+                }
+                return render_template('index.html', context=jugandocontext)
+            else:
+                stable = 0
+                return render_template('index.html', context={
+                    'table': table,
+                    'stable': stable,
+                    'corte': corte,
+                    'algoritmo': algoritmo,
+                    'jugador': jugador,
+                    'ganador': calculate_game_result(table),
+                    'jugadas': jugadasgen(table, jugador)
+                })
         result = game(algorithm1, algorithm2, corte1, corte2)
-        print(result)
         # Average of a list
         nodos_expandidos_player1_promedio = sum(
             result['nodos_expandidos_player1']) / len(result['nodos_expandidos_player1'])
@@ -100,6 +177,41 @@ def index():
     #     return game(1, 2, 1, 1)
     # elif request.method == 'POST':
     #     return {"message": "post"}
+
+
+def cleanReachableStateTableForPlayer(table, opponent):
+    for i in range(8):
+        for j in range(8):
+            if table[i][j] == opponent + 2:
+                table[i][j] = 0
+
+
+def serializeTable(table):
+    serializedTable = ''
+    for i in range(8):
+        for j in range(8):
+            serializedTable = serializedTable + str(table[i][j])
+    return serializedTable
+
+
+def deserializeTable(serializedTable):
+    othello_table = [[0 for i in range(8)] for j in range(8)]
+    counter = 0
+    for i in range(8):
+        for j in range(8):
+            othello_table[i][j] = int(serializedTable[counter])
+            counter = counter + 1
+    return othello_table
+
+
+def jugadasgen(table, jugador):
+    jugadas = []
+    dictionary = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H'}
+    for i in range(8):
+        for j in range(8):
+            if table[i][j] == jugador + 2 or table[i][j] == 5:
+                jugadas.append(str(dictionary[i]) + str(j+1))
+    return jugadas
 
 
 if __name__ == '__main__':
