@@ -19,6 +19,13 @@ def minimaxABDecision(table, iterations, player, opponenent):
     returnValue = minimaxABValue(playTable, player, opponenent, iterations, 1, player, -float("inf"), float("inf"))[0]
     return {"mov": returnValue, "nodos": node_counter}
 
+def reinforcmentLDecision(table, all_moves, player, opponenent, train = False):
+    playTable = deepcopy(table)
+    global node_counter
+    node_counter = 0
+    returnValue = reinforcmentLValue(playTable, all_moves, train, player, opponenent, 1, player, -float("inf"), float("inf"))[0]
+    return {"mov": returnValue, "nodos": node_counter}
+
 
 def maxPlay(plays):
     # print(plays)
@@ -119,6 +126,77 @@ def minimaxABValue(table, maxplayer, minplayer, iterations, it_counter, turno, a
                     reachable_states_table(tempTable)
                     value = minimaxABValue(tempTable, maxplayer, minplayer, iterations, it_counter + 1, minplayer,
                                            alfahere, betahere)
+                    if type(value) == list:
+                        # print(it_counter)
+                        # print(value)
+                        jugadas.append([[i, j], value[1]])
+                        hvalue = value[1]
+                    else:
+                        # print(tempTable)
+                        # print(it_counter)
+                        # print(value)
+                        jugadas.append([[i, j], value])
+                        hvalue = value
+                    if hvalue > alfahere:
+                        alfahere = hvalue
+                    if betahere <= alfahere:
+                        return maxPlay(jugadas)
+                    # print(jugadas)
+        return maxPlay(jugadas)
+    else:
+        jugadas = []
+        for i in range(8):
+            for j in range(8):
+                if table[i][j] == minplayer + 2 or table[i][j] == 5:
+                    tempTable = deepcopy(table)
+                    applyMov(tempTable, [i, j], minplayer)
+                    cleanReachableStateTable(tempTable)
+                    reachable_states_table(tempTable)
+                    value = minimaxABValue(tempTable, maxplayer, minplayer, iterations, it_counter + 1, maxplayer,
+                                           alfahere, betahere)
+                    if type(value) == list:
+                        # print(it_counter)
+                        # print(value)
+                        jugadas.append([[i, j], value[1]])
+                        hvalue = value[1]
+                    else:
+                        # print(tempTable)
+                        # print(it_counter)
+                        # print(value)
+                        jugadas.append([[i, j], value])
+                        hvalue = value
+                    if hvalue < betahere:
+                        betahere = hvalue
+                    if betahere <= alfahere:
+                        return minPlay(jugadas)
+        # print(it_counter)
+        # print(jugadas)
+        return minPlay(jugadas)
+
+def reinforcmentLValue(table, all_moves, train, maxplayer, minplayer, it_counter, turno, alfa, beta):
+    global node_counter
+    node_counter = node_counter + 1
+    turno = turno
+    if turno == maxplayer and not playerCanPlay(table, turno):
+        turno = minplayer
+    elif turno == minplayer and not playerCanPlay(table, turno):
+        turno = maxplayer
+
+    alfahere = alfa
+    betahere = beta
+
+    if calculate_game_result(table) != 0:
+        return utilityFunction(table, maxplayer, minplayer)
+    elif turno == maxplayer:
+        jugadas = []
+        for i in range(8):
+            for j in range(8):
+                if table[i][j] == maxplayer + 2 or table[i][j] == 5:
+                    tempTable = deepcopy(table)
+                    applyMov(tempTable, [i, j], maxplayer)
+                    cleanReachableStateTable(tempTable)
+                    reachable_states_table(tempTable)
+                    
                     if type(value) == list:
                         # print(it_counter)
                         # print(value)
