@@ -1,17 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div id="header">
-      <h1>Othello</h1>
+    <div class="row" id="header">
+      <div class="col-md-4">
+          <h1>Othello</h1>
+      </div>
       {% if error=="Los algoritmos deben ser diferentes" %}
+        <div class="col-md-4">
         <p class="error">{{ error }}</p>
+        </div>
       {% endif %}
       {% if result %}
+        <div class="col-md-4">
         <h2 class="error"><b>El ganador es {{ result.ganador }}</b></h2>
+        </div>
       {% endif %}
     </div>
 
-    <div id="content" style="display: flex">
+
+<div class="row">
+    <div class="col-md-5">
         {% if not result and not context%}
         <div id="table">
             <table id="othello_table">
@@ -19,75 +27,83 @@
             </table>
         </div>
         {% endif %}
-        
-        {% if not result and not context %}
-        
-        <form method="post">
-            
-            <div id="opciones" style="display: flex; flex-direction: column">
-                <select
-                name="algoritmo1"
-                id="algoritmo1"
-                class="custom-select"
-                aria-label="Default select example"
-                >
-                <option selected>Seleccionar el primer algoritmo</option>
-                    <option value="0">Humano</option>
-                <option value="1">Minimax</option>
-                <option value="2">Random</option>
-                <option value="3">Alpha-Beta</option>
-                <option value="4">Reinforcement Learning</option>
-            </select>
-            
-            <select
-            name="algoritmo2"
-            id="algoritmo2"
-            class="custom-select"
-            aria-label="Default select example"
-            >
-            <option selected>Seleccionar el segundo algoritmo</option>
-                <option value="0">Humano</option>
-            <option value="1">Minimax</option>
-            <option value="2">Random</option>
-            <option value="3">Alpha-Beta</option>
-            <option value="4">Reinforcement Learning</option>
-        </select>
-        
-        <select
-        name="corte"
-        id="corte"
-        class="custom-select"
-        aria-label="Default select example"
-        >
-        <option selected>Seleccionar el Nivel de Corte para Algoritmo 1</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-    </select>
-    
-    <select
-    name="corte2"
-    id="corte2"
-    class="custom-select"
-    aria-label="Default select example"
-    >
-    <option selected>Seleccionar el Nivel de Corte para Algoritmo 2</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-</select>
+    </div>
+    {% if not result and not context %}
 
-<button id="iniciar" type="submit" class="btn btn-primary">Iniciar Algoritmo</button>
+        <div class="col-md-4">
+            <form method="post">
+                    <div class="form-group">
+                        <label for="algoritmo1">Negras: </label>
+                        <select
+                        name="algoritmo1"
+                        id="algoritmo1"
+                        class="custom-select"
+                        aria-label="Default select example"
+                        >
+                            <option value="0">Humano</option>
+                            <option selected value="1">Minimax</option>
+                            <option value="2">Random</option>
+                            <option value="3">Alpha-Beta</option>
+                            <option value="4">Reinforcement Learning</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="algoritmo2">Blancas</label>
+                        <select
+                        name="algoritmo2"
+                        id="algoritmo2"
+                        class="custom-select"
+                        aria-label="Default select example"
+                        >
+                            <option value="0">Humano</option>
+                            <option selected value="1">Minimax</option>
+                            <option value="2">Random</option>
+                            <option value="3">Alpha-Beta</option>
+                            <option value="4">Reinforcement Learning</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="corte">Nivel de Corte (Algoritmo Negras)</label>
+                        <select
+                        name="corte"
+                        id="corte"
+                        class="custom-select"
+                        aria-label="Default select example"
+                        >
+                            <option selected value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="corte2">Nivel de Corte (Algoritmo Blancas)</label>
+                        <select
+                        name="corte2"
+                        id="corte2"
+                        class="custom-select"
+                        aria-label="Default select example"
+                        >
+                            <option selected value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+
+                    <button id="iniciar" type="submit" class="btn btn-primary">Iniciar Algoritmo</button>
+            </form>
+        </div>
+    {% endif %}
 </div>
-        </form>
-{% endif %}
-</div>
+
 {% if result %}
 <div class="row">
     <div class="col-md-1"></div>
@@ -127,76 +143,76 @@
 
     </div>
     
-    {% endif %}
-    {% if context %}
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
-                {% if context['jugador'] == 1 %}
-                    {% if context['algoritmo'] == 1 %}
-                        <h3>Minimax({{ context['corte'] }}) vs Jugador</h3>
-                    {% elif context['algoritmo'] == 2 %}
-                        <h3>Random vs Jugador</h3>
-                    {% elif context['algoritmo'] == 3 %}
-                        <h3>Minimax-AlfaBeta({{ context['corte'] }}) vs Jugador</h3>
-                    {% else %}
-                        <h3>RL vs Jugador</h3>
-                    {% endif %}
+{% endif %}
+{% if context %}
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            {% if context['jugador'] == 1 %}
+                {% if context['algoritmo'] == 1 %}
+                    <h3>Minimax({{ context['corte'] }}) vs Jugador</h3>
+                {% elif context['algoritmo'] == 2 %}
+                    <h3>Random vs Jugador</h3>
+                {% elif context['algoritmo'] == 3 %}
+                    <h3>Minimax-AlfaBeta({{ context['corte'] }}) vs Jugador</h3>
                 {% else %}
-                    {% if context['algoritmo'] == 1 %}
-                        <h3>Jugador vs Minimax({{ context['corte'] }})</h3>
-                    {% elif context['algoritmo'] == 2 %}
-                        <h3>Jugador vs Random</h3>
-                    {% elif context['algoritmo'] == 3 %}
-                        <h3>Jugador vs Minimax-AlfaBeta({{ context['corte'] }})</h3>
-                    {% else %}
-                        <h3>Jugador vs RL</h3>
-                    {% endif %}
+                    <h3>RL vs Jugador</h3>
                 {% endif %}
-            </div>
-            <div class="col-md-4"></div>
+            {% else %}
+                {% if context['algoritmo'] == 1 %}
+                    <h3>Jugador vs Minimax({{ context['corte'] }})</h3>
+                {% elif context['algoritmo'] == 2 %}
+                    <h3>Jugador vs Random</h3>
+                {% elif context['algoritmo'] == 3 %}
+                    <h3>Jugador vs Minimax-AlfaBeta({{ context['corte'] }})</h3>
+                {% else %}
+                    <h3>Jugador vs RL</h3>
+                {% endif %}
+            {% endif %}
         </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row">
+        <div id="table2" class="col-md-7">
+            <table id="othello_table2">
+                <tbody id="othello_table_body2"></tbody>
+            </table>
+        </div>
+        <div class="col-md-2">
+            <form method="POST">
+                <label for="fila">Fila+Columna</label>
+                <select class="form-control" name="fila-columna" id="fila-columna">
+                    {% for option in context['jugadas'] %}
+                        <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="custId" name="algoritmo1" value="100">
+                <input type="hidden" id="custId" name="algoritmo2" value="200">
+                <input type="hidden" id="custId" name="corte" value="{{ context['corte'] }}">
+                <input type="hidden" id="custId" name="corte2" value="3487">
+                <input type="hidden" id="custId" name="stable" value="{{ context['stable'] }}">
+                <input type="hidden" id="custId" name="algoritmo" value="{{ context['algoritmo'] }}">
+                <input type="hidden" id="custId" name="jugador" value="{{ context['jugador'] }}">
+                <button type="submit" class="btn btn-primary">Jugar</button>
+            </form>
+        </div>
+    </div>
+    {% if context['ganador'] %}
         <div class="row">
-            <div id="table2" class="col-md-7">
-                <table id="othello_table2">
-                    <tbody id="othello_table_body2"></tbody>
-                </table>
-            </div>
-            <div class="col-md-2">
-                <form method="POST">
-                    <label for="fila">Fila+Columna</label>
-                    <select class="form-control" name="fila-columna" id="fila-columna">
-                        {% for option in context['jugadas'] %}
-                            <option value="{{ option }}">{{ option }}</option>
-                        {% endfor %}
-                    </select>
-                    <input type="hidden" id="custId" name="algoritmo1" value="100">
-                    <input type="hidden" id="custId" name="algoritmo2" value="200">
-                    <input type="hidden" id="custId" name="corte" value="{{ context['corte'] }}">
-                    <input type="hidden" id="custId" name="corte2" value="3487">
-                    <input type="hidden" id="custId" name="stable" value="{{ context['stable'] }}">
-                    <input type="hidden" id="custId" name="algoritmo" value="{{ context['algoritmo'] }}">
-                    <input type="hidden" id="custId" name="jugador" value="{{ context['jugador'] }}">
-                    <button type="submit" class="btn btn-primary">Jugar</button>
-                </form>
+            <div class="col-md-6"></div>
+            <div class="col-md-4">
+                <h3>Ganador:
+                {% if context['ganador'] == 1 %}
+                    Blancas
+                {% elif context['ganador'] == 2 %}
+                    Negras
+                {% else %}
+                    Empate
+                {% endif %}</h3>
             </div>
         </div>
-        {% if context['ganador'] %}
-            <div class="row">
-                <div class="col-md-6"></div>
-                <div class="col-md-4">
-                    <h3>Ganador:
-                    {% if context['ganador'] == 1 %}
-                        Blancas
-                    {% elif context['ganador'] == 2 %}
-                        Negras
-                    {% else %}
-                        Empate
-                    {% endif %}</h3>
-                </div>
-            </div>
-        {% endif %}
     {% endif %}
+{% endif %}
 {% if result %}
   <script>
 

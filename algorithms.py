@@ -1,6 +1,6 @@
 from utils import *
 from copy import deepcopy
-
+import random
 node_counter = 0
 
 
@@ -60,15 +60,9 @@ def minimaxValue(table, maxplayer, minplayer, iterations, it_counter, turno):
                     reachable_states_table(tempTable)
                     value = minimaxValue(tempTable, maxplayer, minplayer, iterations, it_counter + 1, minplayer)
                     if type(value) == list:
-                        # print(it_counter)
-                        # print(value)
                         jugadas.append([[i, j], value[1]])
                     else:
-                        # print(tempTable)
-                        # print(it_counter)
-                        # print(value)
                         jugadas.append([[i, j], value])
-                    # print(jugadas)
         return maxPlay(jugadas)
     else:
         jugadas = []
@@ -81,16 +75,9 @@ def minimaxValue(table, maxplayer, minplayer, iterations, it_counter, turno):
                     reachable_states_table(tempTable)
                     value = minimaxValue(tempTable, maxplayer, minplayer, iterations, it_counter + 1, maxplayer)
                     if type(value) == list:
-                        # print(it_counter)
-                        # print(value)
                         jugadas.append([[i, j], value[1]])
                     else:
-                        # print(tempTable)
-                        # print(it_counter)
-                        # print(value)
                         jugadas.append([[i, j], value])
-        # print(it_counter)
-        # print(jugadas)
         return minPlay(jugadas)
 
 
@@ -120,21 +107,15 @@ def minimaxABValue(table, maxplayer, minplayer, iterations, it_counter, turno, a
                     value = minimaxABValue(tempTable, maxplayer, minplayer, iterations, it_counter + 1, minplayer,
                                            alfahere, betahere)
                     if type(value) == list:
-                        # print(it_counter)
-                        # print(value)
                         jugadas.append([[i, j], value[1]])
                         hvalue = value[1]
                     else:
-                        # print(tempTable)
-                        # print(it_counter)
-                        # print(value)
                         jugadas.append([[i, j], value])
                         hvalue = value
                     if hvalue > alfahere:
                         alfahere = hvalue
                     if betahere <= alfahere:
                         return maxPlay(jugadas)
-                    # print(jugadas)
         return maxPlay(jugadas)
     else:
         jugadas = []
@@ -148,22 +129,15 @@ def minimaxABValue(table, maxplayer, minplayer, iterations, it_counter, turno, a
                     value = minimaxABValue(tempTable, maxplayer, minplayer, iterations, it_counter + 1, maxplayer,
                                            alfahere, betahere)
                     if type(value) == list:
-                        # print(it_counter)
-                        # print(value)
                         jugadas.append([[i, j], value[1]])
                         hvalue = value[1]
                     else:
-                        # print(tempTable)
-                        # print(it_counter)
-                        # print(value)
                         jugadas.append([[i, j], value])
                         hvalue = value
                     if hvalue < betahere:
                         betahere = hvalue
                     if betahere <= alfahere:
                         return minPlay(jugadas)
-        # print(it_counter)
-        # print(jugadas)
         return minPlay(jugadas)
 
 
@@ -323,3 +297,13 @@ def utilityFunction(table, player, opponent):
                           (382.026 * cornerClosenessHeuristic) + (78.922 * movilityHeuristic) + \
                           (74.396 * frontPiecesHeuristic) + (10 * tableHeuristic)
     return heuristicFinalValue
+
+
+def playRandom(table, player):
+    plays = []
+    for i in range(8):
+        for j in range(8):
+            if table[i][j] == player + 2 or table[i][j] == 5:
+                plays.append([i, j])
+    return {"mov": random.choice(plays),
+            "nodos": 1}

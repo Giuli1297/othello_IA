@@ -186,23 +186,6 @@ def cleanReachableStateTableForPlayer(table, opponent):
                 table[i][j] = 0
 
 
-def serializeTable(table):
-    serializedTable = ''
-    for i in range(8):
-        for j in range(8):
-            serializedTable = serializedTable + str(table[i][j])
-    return serializedTable
-
-
-def deserializeTable(serializedTable):
-    othello_table = [[0 for i in range(8)] for j in range(8)]
-    counter = 0
-    for i in range(8):
-        for j in range(8):
-            othello_table[i][j] = int(serializedTable[counter])
-            counter = counter + 1
-    return othello_table
-
 
 def jugadasgen(table, jugador):
     jugadas = []

@@ -1,9 +1,9 @@
 import random
 import time
-
+from rl import playAgainsRL
 
 from utils import *
-from algorithms import minimaxDecision, minimaxABDecision
+from algorithms import minimaxDecision, minimaxABDecision,  playRandom
 
 
 def playInSomeWay(table, cod, iterations, player, opponent):
@@ -14,6 +14,8 @@ def playInSomeWay(table, cod, iterations, player, opponent):
         mov = playRandom(table, player)
     elif cod == 3:
         mov = minimaxABDecision(table, iterations, player, opponent)
+    elif cod == 4:
+        mov = playAgainsRL(table, player)
     return mov
 
 
@@ -66,13 +68,5 @@ def game(algorithm1, algorithm2, algoritm1_level, algorithm2_level):
             "tiempos_player2": tiempo_player2}
 
 
-def playRandom(table, player):
-    plays = []
-    for i in range(8):
-        for j in range(8):
-            if table[i][j] == player + 2 or table[i][j] == 5:
-                plays.append([i, j])
-    return {"mov": random.choice(plays),
-            "nodos": 1}
 
 

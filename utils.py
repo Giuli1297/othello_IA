@@ -12,6 +12,24 @@ def start_othello_game():
     return othello_table
 
 
+def serializeTable(table):
+    serializedTable = ''
+    for i in range(8):
+        for j in range(8):
+            serializedTable = serializedTable + str(table[i][j])
+    return serializedTable
+
+
+def deserializeTable(serializedTable):
+    othello_table = [[0 for i in range(8)] for j in range(8)]
+    counter = 0
+    for i in range(8):
+        for j in range(8):
+            othello_table[i][j] = int(serializedTable[counter])
+            counter = counter + 1
+    return othello_table
+
+
 def playableTopRight(i, j, othello_table):
     if j < 6 and i > 1 and othello_table[i][j] != 1 and othello_table[i][j] != 2:
         if othello_table[i-1][j+1] == 1:
