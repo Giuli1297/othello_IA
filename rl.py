@@ -199,7 +199,7 @@ def jugarVsRandom():
         updateProbability(lasttable, calculateReward(tabla, jugador), jugador)
 
 
-def jugarVsAB():
+def jugarVsAB(corte):
     global tabla
     global lasttable
     global alpha
@@ -224,7 +224,40 @@ def jugarVsAB():
                 else:
                     jugarRandom(jugador)
             else:
-                applyMov(tabla, minimaxABDecision(tabla, 1, contrario, jugador)['mov'], contrario)
+                applyMov(tabla, minimaxABDecision(tabla, corte, contrario, jugador)['mov'], contrario)
+                cleanReachableStateTable(tabla)
+                reachable_states_table(tabla)
+            result = calculate_game_result(tabla)
+        turno = 2 - turno + 1
+    if result != jugador and entrenar:
+        updateProbability(lasttable, calculateReward(tabla, jugador), jugador)
+
+def jugarVsRL():
+    global tabla
+    global lasttable
+    global alpha
+    global entrenar
+    global gameResult
+    global iteraciones
+    global jugador_agente
+    global qrate
+    global N
+    jugador = jugador_agente
+    contrario = (jugador % 2) + 1
+
+    turno = 2
+    result = 0
+    while result == 0:
+        canp = playerCanPlay(tabla, turno)
+        if canp:
+            if turno == jugador:
+                q = random.random()
+                if q <= qrate or not entrenar:
+                    jugar(jugador)
+                else:
+                    jugarRandom(jugador)
+            else:
+                applyMov(tabla, playAgainsRL(tabla, contrario)['mov'], contrario)
                 cleanReachableStateTable(tabla)
                 reachable_states_table(tabla)
             result = calculate_game_result(tabla)
@@ -233,7 +266,7 @@ def jugarVsAB():
         updateProbability(lasttable, calculateReward(tabla, jugador), jugador)
 
 
-def trainRL(trainingCount, qrates, player, opponent):
+def trainRL(trainingCount, qrates, player, opponent, corte):
     setN(trainingCount)
     setqRate(qrates)
     global jugador_agente
@@ -247,8 +280,10 @@ def trainRL(trainingCount, qrates, player, opponent):
         updateAlpha(i)
         if opponent == 1:
             jugarVsRandom()
+        elif opponent == 3:
+            jugarVsRL()
         else:
-            jugarVsAB()
+            jugarVsAB(corte)
     saveLearningTable()
     return learningTable
 
