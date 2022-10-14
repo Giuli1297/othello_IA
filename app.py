@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from game import *
+from rl import trainRL
 from utils import *
 
 app = Flask(__name__)
@@ -16,7 +17,7 @@ dictionaryLN = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7}
 def index():
     if request.method == 'GET':
         return render_template('index.html')
-    elif request.method == 'POST':
+    elif request.method == 'POST' and int(request.form['entrenar']) == 0:
         algorithm1 = int(request.form['algoritmo1'])
         algorithm2 = int(request.form['algoritmo2'])
         corte1 = int(request.form['corte'])
@@ -174,11 +175,17 @@ def index():
         }
         return render_template('index.html', **context)
 
-    # if request.method == 'GET':
-    #     print(request.args.get("codigo"))
-    #     return game(1, 2, 1, 1)
-    # elif request.method == 'POST':
-    #     return {"message": "post"}
+    elif request.method == 'POST' and int(request.form['entrenar']) == 1:
+        opponent = int(request.form['algoritmo'])
+        player = int(request.form['jugador'])
+        corte = int(request.form['corte'])
+        pruebas = int(request.form['pruebas'])
+        qrate = float(request.form['qrate'])
+        trainRL(pruebas, qrate, player, opponent, corte)
+        context = {
+            'msj': 'Entrenado correctamente'
+        }
+        return render_template('index.html', **context)
 
 
 def cleanReachableStateTableForPlayer(table, opponent):
