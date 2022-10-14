@@ -136,6 +136,8 @@ def index():
             'nodos_expandidos_algoritmo_2_promedio': nodos_expandidos_player2_promedio,
             'nodos_expandidos_algoritmo_1_max': nodos_expandidos_player1_max,
             'nodos_expandidos_algoritmo_2_max': nodos_expandidos_player2_max,
+            'tiempo_promedio1': tiempo_total_algoritmo_1/len(result['tiempos_player1']),
+            'tiempo_promedio2': tiempo_total_algoritmo_2 / len(result['tiempos_player2']),
             'tiempo_total_algoritmo_1': tiempo_total_algoritmo_1,
             'tiempo_total_algoritmo_2': tiempo_total_algoritmo_2
         }

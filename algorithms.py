@@ -47,7 +47,7 @@ def minimaxValue(table, maxplayer, minplayer, iterations, it_counter, turno):
     elif turno == minplayer and not playerCanPlay(table, turno):
         turno = maxplayer
 
-    if calculate_game_result(table) != 0 or it_counter == iterations * 2 + 1:
+    if calculate_game_result(table) != 0 or it_counter == iterations + 1:
         return utilityFunction(table, maxplayer, minplayer)
     elif turno == maxplayer:
         jugadas = []
@@ -93,7 +93,7 @@ def minimaxABValue(table, maxplayer, minplayer, iterations, it_counter, turno, a
     alfahere = alfa
     betahere = beta
 
-    if calculate_game_result(table) != 0 or it_counter == iterations * 2 + 1:
+    if calculate_game_result(table) != 0 or it_counter == iterations + 1:
         return utilityFunction(table, maxplayer, minplayer)
     elif turno == maxplayer:
         jugadas = []

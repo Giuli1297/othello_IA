@@ -1,5 +1,6 @@
 import random
 import ast
+import time
 
 from algorithms import *
 from utils import *
@@ -15,6 +16,7 @@ iteraciones = 0
 jugador_agente = 2
 qrate = 0.0
 N = 1
+counter = 0
 
 
 def setN(a):
@@ -72,11 +74,14 @@ def getProbability(tabla):
     global jugador_agente
     global qrate
     global N
+    global counter
     stabla = deepcopy(tabla)
     cleanReachableStateTable(stabla)
     stabla = serializeTable(stabla)
     if stabla not in learningTable.keys():
         learningTable[stabla] = 0.5
+    else:
+        counter = counter + 1
     return learningTable[stabla]
 
 
@@ -224,7 +229,7 @@ def jugarVsAB():
                 else:
                     jugarRandom(jugador)
             else:
-                applyMov(tabla, minimaxABDecision(tabla, 1, contrario, jugador)['mov'], contrario)
+                applyMov(tabla, minimaxABDecision(tabla, 2, contrario, jugador)['mov'], contrario)
                 cleanReachableStateTable(tabla)
                 reachable_states_table(tabla)
             result = calculate_game_result(tabla)
@@ -238,10 +243,13 @@ def trainRL(trainingCount, qrates, player, opponent):
     setqRate(qrates)
     global jugador_agente
     jugador_agente = player
-
+    start = time.time()
     loadLearningTable()
+    end = time.time()
+    print(end-start)
+    print(len(learningTable))
     for i in range(N):
-        if i % 10 == 0:
+        if i % 100 == 0:
             print(i)
         reset()
         updateAlpha(i)
@@ -311,5 +319,6 @@ def playAgainsRL(table, turno):
     return {'mov': [row, col], 'nodos': 0}
 
 
-# x = trainRL(trainingCount=100, qrates=1, player=1, opponent=1)
+# x = trainRL(trainingCount=10, qrates=0.7, player=1, opponent=2)
 # print(len(x))
+print(counter)

@@ -121,6 +121,7 @@
                     <th>Algoritmo</th>
                     <th>Promedio Nodos Expandidos</th>
                     <th>Max Nodos Expandido</th>
+                    <th>Tiempo Promedio</th>
                     <th>Tiempo Total(s)</th>
                 </tr>
             </thead>
@@ -129,12 +130,14 @@
                     <td>{{ algoritmo1 }} Corte = ({{corte1}})</td>
                     <td>{{ result['nodos_expandidos_algoritmo_1_promedio'] }}</td>
                     <td>{{ result['nodos_expandidos_algoritmo_1_max'] }}</td>
+                    <td>{{ result['tiempo_promedio1'] }}</td>
                     <td>{{ result['tiempo_total_algoritmo_1'] }}</td>
                 </tr>
                 <tr>
                     <td>{{ algoritmo2 }} Corte = ({{corte2}})</td>
                     <td>{{ result['nodos_expandidos_algoritmo_2_promedio'] }}</td>
                     <td>{{ result['nodos_expandidos_algoritmo_2_max'] }}</td>
+                    <td>{{ result['tiempo_promedio2'] }}</td>
                     <td>{{ result['tiempo_total_algoritmo_2'] }}</td>
                 </tr>
             </tbody>
