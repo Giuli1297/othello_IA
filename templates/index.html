@@ -174,7 +174,26 @@
 </div>
 
 {% if msj %}
-    <h1> {{msj}}</h1>
+    <div class="row">
+        <h4 style="margin: auto"> {{msj}}</h4>
+    </div>
+    <div class="row" style="padding-top: 50px">
+        <div class="col-md-2">
+            Longitud de Tabla Inicial: {{ content['startlen'] }}
+        </div>
+        <div class="col-md-2">
+            Longitud de Tabla Final: {{ content['endlen'] }}
+        </div>
+        <div class="col-md-2">
+            Elementos Actualizados: {{ content['actualized_elements'] }}
+        </div>
+        <div class="col-md-2">
+            Tiempo de Carga: {{ content['loadtime'] }}
+        </div>
+        <div class="col-md-2">
+            Tiempo de Entrenamiento: {{ content['trainduration'] }}
+        </div>
+    </div>
 {% endif %}
 
 {% if result %}

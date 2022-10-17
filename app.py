@@ -13,6 +13,7 @@ algorithms = {
 
 dictionaryLN = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7}
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
@@ -25,6 +26,8 @@ def index():
 
         # if algorithm1 == algorithm2:
         #     return render_template('index.html', error='Los algoritmos deben ser diferentes')
+
+        # Administracion de Jugador vs Maquina
 
         if algorithm1 == 0 and algorithm2 != 0:
             algoritmo = algorithm2
@@ -66,7 +69,7 @@ def index():
             corte = int(request.form['corte'])
             jugador = int(request.form['jugador'])
             fila = dictionaryLN[request.form['fila-columna'][0]]
-            columna = int(request.form['fila-columna'][1])-1
+            columna = int(request.form['fila-columna'][1]) - 1
             algoritmo = int(request.form['algoritmo'])
             if calculate_game_result(table) == 0:
                 applyMov(table, [fila, columna], jugador)
@@ -118,7 +121,9 @@ def index():
                     'jugadas': jugadasgen(table, jugador)
                 })
         result = game(algorithm1, algorithm2, corte1, corte2)
-        # Average of a list
+
+        # Administracion de Datos a Retornar en Algoritmo vs Algoritmo
+
         nodos_expandidos_player1_promedio = sum(
             result['nodos_expandidos_player1']) / len(result['nodos_expandidos_player1'])
         nodos_expandidos_player2_promedio = sum(
@@ -137,7 +142,7 @@ def index():
             'nodos_expandidos_algoritmo_2_promedio': nodos_expandidos_player2_promedio,
             'nodos_expandidos_algoritmo_1_max': nodos_expandidos_player1_max,
             'nodos_expandidos_algoritmo_2_max': nodos_expandidos_player2_max,
-            'tiempo_promedio1': tiempo_total_algoritmo_1/len(result['tiempos_player1']),
+            'tiempo_promedio1': tiempo_total_algoritmo_1 / len(result['tiempos_player1']),
             'tiempo_promedio2': tiempo_total_algoritmo_2 / len(result['tiempos_player2']),
             'tiempo_total_algoritmo_1': tiempo_total_algoritmo_1,
             'tiempo_total_algoritmo_2': tiempo_total_algoritmo_2
@@ -175,15 +180,18 @@ def index():
         }
         return render_template('index.html', **context)
 
+    # Administracion de Entrenamiento
+
     elif request.method == 'POST' and int(request.form['entrenar']) == 1:
         opponent = int(request.form['algoritmo'])
         player = int(request.form['jugador'])
         corte = int(request.form['corte'])
         pruebas = int(request.form['pruebas'])
         qrate = float(request.form['qrate'])
-        trainRL(pruebas, qrate, player, opponent, corte)
+        content=trainRL(pruebas, qrate, player, opponent, corte)
         context = {
-            'msj': 'Entrenado correctamente'
+            'msj': 'Entrenado correctamente',
+            'content':content
         }
         return render_template('index.html', **context)
 
@@ -195,14 +203,13 @@ def cleanReachableStateTableForPlayer(table, opponent):
                 table[i][j] = 0
 
 
-
 def jugadasgen(table, jugador):
     jugadas = []
     dictionary = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H'}
     for i in range(8):
         for j in range(8):
             if table[i][j] == jugador + 2 or table[i][j] == 5:
-                jugadas.append(str(dictionary[i]) + str(j+1))
+                jugadas.append(str(dictionary[i]) + str(j + 1))
     return jugadas
 
 

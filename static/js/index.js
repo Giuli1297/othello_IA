@@ -334,5 +334,32 @@ dibujarTablero(mat, n)
 // seleccionarCelda(mat);
 
 
+const loaderContainer = document.querySelector('.loader-container');
 
 
+window.addEventListener('load', () => {
+    loaderContainer.style.display = 'none';
+});
+
+window.addEventListener('onpopstate', () => {
+    loaderContainer.style.display = 'none';
+});
+
+
+const displayLoading = () => {
+    loaderContainer.style.display = 'block';
+};
+
+const hideLoading = () => {
+    loaderContainer.style.display = 'none';
+};
+
+
+
+
+const jugarbutton = document.getElementById("iniciar")
+const entrenarbutton = document.getElementById("entrenar")
+
+
+jugarbutton.addEventListener('click',displayLoading)
+entrenarbutton.addEventListener("click", displayLoading)

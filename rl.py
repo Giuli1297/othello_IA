@@ -278,11 +278,12 @@ def trainRL(trainingCount, qrates, player, opponent, corte):
     jugador_agente = player
     start = time.time()
     loadLearningTable()
+    startlen = len(learningTable)
     end = time.time()
-    print(end-start)
-    print(len(learningTable))
+    loadtime = end - start
+    start = time.time()
     for i in range(N):
-        if i % 100 == 0:
+        if i % 10 == 0:
             print(i)
         reset()
         updateAlpha(i)
@@ -293,7 +294,16 @@ def trainRL(trainingCount, qrates, player, opponent, corte):
         else:
             jugarVsAB(corte)
     saveLearningTable()
-    return learningTable
+    end = time.time()
+    trainduration = end - start
+    endlen = len(learningTable)
+    return {
+        "startlen": startlen,
+        "loadtime": loadtime,
+        "trainduration": trainduration,
+        "endlen": endlen,
+        "actualized_elements": counter
+    }
 
 
 def loadLearningTable():
