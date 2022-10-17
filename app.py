@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask, render_template, request
 from game import *
 from rl import trainRL
@@ -41,13 +43,17 @@ def index():
                 'corte': corte2,
                 'algoritmo': algoritmo,
                 'jugador': 2,
-                'jugadas': jugadasgen(table, 2)
+                'jugadas': jugadasgen(table, 2),
+                'machine_plays': [],
+                'playtime': 0
             }
             return render_template('index.html', context=jugandocontext)
         elif algorithm1 != 0 and algorithm2 == 0:
             algoritmo = algorithm1
             table = start_othello_game()
+            start = time.time()
             mov_nod = playInSomeWay(table, algorithm1, corte1, player=2, opponent=1)
+            end = time.time()
             mov = mov_nod['mov']
             applyMov(table, mov, 2)
             cleanReachableStateTable(table)
@@ -61,7 +67,9 @@ def index():
                 'corte': corte1,
                 'algoritmo': algoritmo,
                 'jugador': 1,
-                'jugadas': jugadasgen(table, 1)
+                'jugadas': jugadasgen(table, 1),
+                'machine_plays': [mov],
+                'playtime': end - start
             }
             return render_template('index.html', context=jugandocontext)
         if algorithm1 == 100:
@@ -71,18 +79,22 @@ def index():
             fila = dictionaryLN[request.form['fila-columna'][0]]
             columna = int(request.form['fila-columna'][1]) - 1
             algoritmo = int(request.form['algoritmo'])
+            movs = []
             if calculate_game_result(table) == 0:
                 applyMov(table, [fila, columna], jugador)
                 cleanReachableStateTable(table)
                 reachable_states_table(table)
+                start = time.time()
                 if playerCanPlay(table, jugador % 2 + 1):
                     mov_nod = playInSomeWay(table, algoritmo, corte, jugador % 2 + 1, jugador)
                     mov = mov_nod['mov']
+                    movs.append(mov)
                     applyMov(table, mov, jugador % 2 + 1)
                     cleanReachableStateTable(table)
                     reachable_states_table(table)
                 while not playerCanPlay(table, jugador):
                     if calculate_game_result(table) != 0:
+                        end = time.time()
                         stable = 0
                         return render_template('index.html', context={
                             'table': table,
@@ -91,14 +103,18 @@ def index():
                             'algoritmo': algoritmo,
                             'jugador': jugador,
                             'ganador': calculate_game_result(table),
-                            'jugadas': jugadasgen(table, jugador)
+                            'jugadas': jugadasgen(table, jugador),
+                            'machine_plays': movs,
+                            'playtime': end - start
                         })
                     mov_nod = playInSomeWay(table, algoritmo, corte, jugador % 2 + 1, jugador)
                     mov = mov_nod['mov']
+                    movs.append(mov)
                     applyMov(table, mov, jugador % 2 + 1)
                     cleanReachableStateTable(table)
                     reachable_states_table(table)
                 stable = serializeTable(table)
+                end = time.time()
                 cleanReachableStateTableForPlayer(table, opponent=jugador % 2 + 1)
                 jugandocontext = {
                     'table': table,
@@ -106,7 +122,9 @@ def index():
                     'corte': corte,
                     'algoritmo': algoritmo,
                     'jugador': jugador,
-                    'jugadas': jugadasgen(table, jugador)
+                    'jugadas': jugadasgen(table, jugador),
+                    'machine_plays': movs,
+                    'playtime': end - start
                 }
                 return render_template('index.html', context=jugandocontext)
             else:
@@ -118,7 +136,9 @@ def index():
                     'algoritmo': algoritmo,
                     'jugador': jugador,
                     'ganador': calculate_game_result(table),
-                    'jugadas': jugadasgen(table, jugador)
+                    'jugadas': jugadasgen(table, jugador),
+                    'machine_plays': movs,
+                    'playtime': 0
                 })
         result = game(algorithm1, algorithm2, corte1, corte2)
 

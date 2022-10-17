@@ -363,3 +363,44 @@ const entrenarbutton = document.getElementById("entrenar")
 
 jugarbutton.addEventListener('click',displayLoading)
 entrenarbutton.addEventListener("click", displayLoading)
+
+const selectA1P = document.getElementById("algoritmo1")
+const selectA2P = document.getElementById("algoritmo2")
+
+selectA1P.addEventListener("change", ()=>{
+  if(selectA1P.value == "1" || selectA1P.value == "3"){
+    document.getElementById("corte").removeAttribute('disabled')
+  }else{
+    document.getElementById("corte").setAttribute('disabled', "")
+  }
+})
+
+selectA2P.addEventListener("change", ()=>{
+  if(selectA2P.value == "1" || selectA2P.value == "3"){
+    document.getElementById("corte2").removeAttribute('disabled')
+  }else{
+    document.getElementById("corte2").setAttribute('disabled', "")
+  }
+})
+
+const playform = document.getElementById("playform")
+
+playform.addEventListener("submit", ()=>{
+  document.getElementById("corte").removeAttribute('disabled')
+  document.getElementById("corte2").removeAttribute('disabled')
+})
+
+const selectAE = document.getElementById("algoritmoe")
+const entform = document.getElementById("entform")
+
+selectAE.addEventListener("change", ()=>{
+  if(selectAE.value == "2"){
+    document.getElementById("cortee").removeAttribute('disabled')
+  }else{
+    document.getElementById("cortee").setAttribute('disabled', "")
+  }
+})
+
+entform.addEventListener("submit", ()=>{
+  document.getElementById("cortee").removeAttribute('disabled')
+})

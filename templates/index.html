@@ -12,7 +12,11 @@
       {% endif %}
       {% if result %}
         <div class="col-md-4">
-        <h2 class="error"><b>El ganador es {{ result.ganador }}</b></h2>
+        {% if result.ganador == -1 %}
+            <h2 class="error"><b>Empate</b></h2>
+        {% else %}
+            <h2 class="error"><b>El ganador es {{ result.ganador }}.</b></h2>
+        {% endif %}
         </div>
       {% endif %}
     </div>
@@ -30,8 +34,8 @@
     </div>
     {% if not result and not context %}
 
-        <div class="col-md-4">
-            <form method="post">
+        <div class="col-md-3">
+            <form method="post" id="playform">
                     <div class="form-group">
                         <label for="algoritmo1">Negras: </label>
                         <select
@@ -78,6 +82,10 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                             <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
                         </select>
                     </div>
 
@@ -95,6 +103,10 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                             <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
                         </select>
                     </div>
 
@@ -102,9 +114,9 @@
                     <button id="iniciar" type="submit" class="btn btn-primary">Iniciar Algoritmo</button>
             </form>
         </div>
-
-        <div class="col-md-4">
-            <form method="post">
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+            <form method="post" id="entform">
                     <div class="form-group">
                         <label for="jugador">Jugador: </label>
                         <select
@@ -122,12 +134,12 @@
                         <label for="algoritmo">Algoritmo</label>
                         <select
                         name="algoritmo"
-                        id="algoritmo"
+                        id="algoritmoe"
                         class="custom-select"
                         aria-label="Default select example"
                         >
-                            <option value="2">Alpha-Beta</option>
-                            <option selected value="1">Random</option>
+                            <option selected value="2">Alpha-Beta</option>
+                            <option value="1">Random</option>
                             <option value="3">Reinforcement Learning</option>
                         </select>
                     </div>
@@ -136,7 +148,7 @@
                         <label for="corte">Nivel de Corte (Algoritmo AB):</label>
                         <select
                         name="corte"
-                        id="corte"
+                        id="cortee"
                         class="custom-select"
                         aria-label="Default select example"
                         >
@@ -146,6 +158,10 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                             <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
                         </select>
                     </div>
 
@@ -288,8 +304,17 @@
                 <input type="hidden" id="custId" name="stable" value="{{ context['stable'] }}">
                 <input type="hidden" id="custId" name="algoritmo" value="{{ context['algoritmo'] }}">
                 <input type="hidden" id="custId" name="jugador" value="{{ context['jugador'] }}">
+                <input type="hidden" id="entremar" name="entrenar" value="0">
                 <button type="submit" class="btn btn-primary">Jugar</button>
             </form>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                Jugadas del Algoritmo: {{ context.machine_plays }}
+            </div>
+            <div class="row">
+                Tiempo: {{ context.playtime }}
+            </div>
         </div>
     </div>
     {% if context['ganador'] %}
